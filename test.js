@@ -32,7 +32,22 @@ describe("Alea", function() {
 
   it("should reset the seed and shuffle an array", function() {
 
-    expect(alea.shuffle([1,2,3,4,5])).to.be.deep.equal([3,5,1,2,4]);
+    expect(alea.reset(0)).to.be.equal(0);
+    expect(alea.shuffle([1,2,3,4,5])).to.be.deep.equal([1,2,3,4,5]);
+
+  });
+
+  it("should reset the seed and pick 3 elements from an array", function() {
+
+    expect(alea.reset(0)).to.be.equal(0);
+    expect(alea.pick([1,2,3,4,5], 20)).to.be.deep.equal([4,2,5,2,5,1,2,1,3,4,2,1,4,3,4,3,2,3,4,1]);
+
+  });
+
+  it("should reset the seed and take 3 elements from an array", function() {
+
+    expect(alea.reset(0)).to.be.equal(0);
+    expect(alea.take([1,2,3,4,5], 20)).to.be.deep.equal([4,2,5,1,3]);
 
   });
 

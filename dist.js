@@ -15,6 +15,8 @@ exports.fudge = fudge;
 exports.dice = dice;
 exports.roll = roll;
 exports.shuffle = shuffle;
+exports.pick = pick;
+exports.take = take;
 /** @module alea */
 
 /**
@@ -192,14 +194,67 @@ function roll(dices) {
  *
  * @see https://css-tricks.com/snippets/javascript/shuffle-array/
  * @param {Array} array Array that is going to be shuffled
- * @return {Array} The same array used as input
+ * @return {Array} Returns a shuffled copy of the input array.
  * @example
  * shuffle([1,2,3,4]);
  */
-function shuffle(o) {
-  for (var j, x, i = o.length; i; j = intBetween(i, 0), x = o[--i], o[i] = o[j], o[j] = x) {}
+function shuffle(array) {
+  var o = array.slice();
+  for (var j, x, i = o.length - 1; i; j = intBetween(i, 0), x = o[--i], o[i] = o[j], o[j] = x) {}
   return o;
-};
+}
+
+/**
+ * Picks one or more elements from an array.
+ *
+ * @param {Array} array Array that is going to be used to pick a value
+ * @param {Number} count Number of elements to pick from the array
+ * @return {Array} Returns elements from the array (with repetition)
+ * @example
+ * pick([1,2,3,4,5,6,7,8], 3);
+ */
+function pick(o) {
+  var count = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
+
+  var result = [];
+  if (count === 0) {
+    return result;
+  }
+
+  for (var i = 0; i < count; i++) {
+    var index = intBetween(o.length - 1, 0);
+    result.push(o[index]);
+  }
+
+  return result;
+}
+
+/**
+ * Takes one or more elemnts from an array.
+ *
+ * @param {Array} array Array that is going to be used to pick a value
+ * @param {Number} count Number of elements to pick from the array
+ * @return {Array} Returns a part of the array (without repetition)
+ * @example
+ * take([1,2,3,4,5,6,7,8], 3);
+ */
+function take(o) {
+  var count = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
+
+  var array = o.slice();
+  var result = [];
+  if (count === 0) {
+    return result;
+  }
+
+  var length = Math.min(count, array.length);
+  for (var i = 0; i < length; i++) {
+    var index = intBetween(array.length - 1, 0);
+    result.push(array.splice(index, 1).shift());
+  }
+
+  return result;
+}
 
 exports.default = {
   dice: dice,
@@ -209,7 +264,9 @@ exports.default = {
   random: random,
   reset: reset,
   roll: roll,
-  shuffle: shuffle
+  shuffle: shuffle,
+  pick: pick,
+  take: take
 };
 
 },{}]},{},[1])(1)
