@@ -172,10 +172,31 @@ export function roll(dices) {
  * @example
  * shuffle([1,2,3,4]);
  */
-export function shuffle(array) {
-  const o = array.slice();
-  for (let j, x, i = o.length - 1; i; j = intBetween(i,0), x = o[--i], o[i] = o[j], o[j] = x);
-  return o;
+export function shuffle(input) {
+  const array = input.slice();
+  if (array.length === 0) {
+    return array;
+  }
+
+  const start = array.length - 1;
+  for (let i = start; i >= 0; i--) {
+    const index = intBetween(i, 0);
+    const tmp = array[i];
+    array[i] = array[index];
+    array[index] = tmp;
+  }
+  return array;
+}
+
+export function pickOne(array) {
+  const index = intBetween(array.length - 1, 0);
+  return array[index];
+}
+
+export function takeOne(array) {
+  const index = intBetween(array.length - 1, 0);
+  const [removed] = array.splice(index, 1);
+  return removed;
 }
 
 /**
@@ -189,13 +210,12 @@ export function shuffle(array) {
  */
 export function pick(o, count = 1) {
   const result = [];
-  if (count === 0) {
+  if (count <= 0) {
     return result;
   }
 
   for (let i = 0; i < count; i++) {
-    const index = intBetween(o.length - 1, 0);
-    result.push(o[index]);
+    result.push(pickOne(o));
   }
 
   return result;
@@ -213,28 +233,29 @@ export function pick(o, count = 1) {
 export function take(o, count = 1) {
   const array = o.slice();
   const result = [];
-  if (count === 0) {
+  if (count <= 0) {
     return result;
   }
 
   const length = Math.min(count, array.length);
   for (let i = 0; i < length; i++) {
-    const index = intBetween(array.length - 1, 0);
-    result.push(array.splice(index, 1).shift());
+    result.push(takeOne(array));
   }
 
   return result;
 }
 
 export default {
-  dice,
-  floatBetween,
-  fudge,
-  intBetween,
-  random,
   reset,
+  random,
+  intBetween,
+  floatBetween,
+  dice,
+  fudge,
   roll,
   shuffle,
+  pickOne,
+  takeOne,
   pick,
   take
 };

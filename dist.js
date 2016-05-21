@@ -15,6 +15,8 @@ exports.fudge = fudge;
 exports.dice = dice;
 exports.roll = roll;
 exports.shuffle = shuffle;
+exports.pickOne = pickOne;
+exports.takeOne = takeOne;
 exports.pick = pick;
 exports.take = take;
 /** @module alea */
@@ -198,10 +200,37 @@ function roll(dices) {
  * @example
  * shuffle([1,2,3,4]);
  */
-function shuffle(array) {
-  var o = array.slice();
-  for (var j, x, i = o.length - 1; i; j = intBetween(i, 0), x = o[--i], o[i] = o[j], o[j] = x) {}
-  return o;
+function shuffle(input) {
+  var array = input.slice();
+  if (array.length === 0) {
+    return array;
+  }
+
+  var start = array.length - 1;
+  for (var i = start; i >= 0; i--) {
+    var index = intBetween(i, 0);
+    var tmp = array[i];
+    array[i] = array[index];
+    array[index] = tmp;
+  }
+  return array;
+}
+
+function pickOne(array) {
+  var index = intBetween(array.length - 1, 0);
+  return array[index];
+}
+
+function takeOne(array) {
+  var index = intBetween(array.length - 1, 0);
+
+  var _array$splice = array.splice(index, 1);
+
+  var _array$splice2 = _slicedToArray(_array$splice, 1);
+
+  var removed = _array$splice2[0];
+
+  return removed;
 }
 
 /**
@@ -217,13 +246,12 @@ function pick(o) {
   var count = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
 
   var result = [];
-  if (count === 0) {
+  if (count <= 0) {
     return result;
   }
 
   for (var i = 0; i < count; i++) {
-    var index = intBetween(o.length - 1, 0);
-    result.push(o[index]);
+    result.push(pickOne(o));
   }
 
   return result;
@@ -243,28 +271,29 @@ function take(o) {
 
   var array = o.slice();
   var result = [];
-  if (count === 0) {
+  if (count <= 0) {
     return result;
   }
 
   var length = Math.min(count, array.length);
   for (var i = 0; i < length; i++) {
-    var index = intBetween(array.length - 1, 0);
-    result.push(array.splice(index, 1).shift());
+    result.push(takeOne(array));
   }
 
   return result;
 }
 
 exports.default = {
-  dice: dice,
-  floatBetween: floatBetween,
-  fudge: fudge,
-  intBetween: intBetween,
-  random: random,
   reset: reset,
+  random: random,
+  intBetween: intBetween,
+  floatBetween: floatBetween,
+  dice: dice,
+  fudge: fudge,
   roll: roll,
   shuffle: shuffle,
+  pickOne: pickOne,
+  takeOne: takeOne,
   pick: pick,
   take: take
 };
