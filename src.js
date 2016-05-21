@@ -188,11 +188,27 @@ export function shuffle(input) {
   return array;
 }
 
+/**
+ * Picks one element from an array.
+ *
+ * @param {Array} array Array that is going to be used to pick a value
+ * @return {mixed} Returns an element from the array
+ * @example
+ * pickOne([1,2,3,4,5,6,7,8]);
+ */
 export function pickOne(array) {
   const index = intBetween(array.length - 1, 0);
   return array[index];
 }
 
+/**
+ * Takes one
+ *
+ * @param {Array} array Array that is going to be used to pick a value
+ * @return {mixed} Returns an element from the array (removing it from the array)
+ * @example
+ * takeOne([1,2,3,4,5,6,7,8]);
+ */
 export function takeOne(array) {
   const index = intBetween(array.length - 1, 0);
   const [removed] = array.splice(index, 1);
